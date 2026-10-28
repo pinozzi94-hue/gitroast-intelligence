@@ -175,6 +175,21 @@ footer{border-top:1px solid #211d1a;min-height:112px;display:flex;align-items:ce
 @media(max-width:900px){.studio-top{grid-template-columns:1fr}.studio-settings{justify-self:start;max-width:none}.studio-footer{align-items:flex-start;flex-direction:column}.studio-footnote{text-align:left;max-width:none}}
 @media(max-width:650px){.studio-top{padding:25px 20px 20px;gap:24px}.studio-preview-outer{margin:0 12px;padding:10px;min-height:175px}.studio-footer{padding:18px 20px 24px}.studio-buttons{width:100%}.studio-download{flex:1;min-width:130px}.theme-option{min-height:66px}.studio-preview-label{font-size:8px;top:8px;left:8px}}
 
+
+/* Adaptive Card Studio for compact phones, tablets, ultrawide screens and touch */
+html,body{max-width:100%;overflow-x:clip}
+.shell,.search-wrap,.report,.grid,.studio,.card{min-width:0}
+img,svg,canvas{max-width:100%}
+.studio-preview-outer{overflow:hidden}
+.studio-preview-outer img{max-width:100%;height:auto;object-fit:contain}
+.action-group,.studio-buttons,.hero-meta{min-width:0}
+@media(min-width:1900px){.shell{width:min(1500px,calc(100% - 80px))}.hero{padding:130px 0 100px}.report{max-width:1500px}.studio-preview-outer img{max-height:600px}}
+@media(min-width:651px) and (max-width:950px){.report-head{gap:16px}.score-copy{min-width:0}.studio-top{grid-template-columns:1fr}.studio-settings{justify-self:start;max-width:100%}}
+@media(max-width:650px){.shell{width:calc(100% - 24px)}.search{min-width:0}.search input{min-width:0;width:100%}.studio-preview-outer{min-width:0}.report-actions .action-group{max-width:100%}.score-wrap{flex-wrap:wrap}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{min-width:0}.verdict-quote{overflow-wrap:anywhere}.theme-picker{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:380px){.shell{width:calc(100% - 16px)}.hero{padding:55px 0 42px}.hero h1{font-size:clamp(36px,12vw,48px)}.search{gap:7px;padding-left:10px}.studio-top{padding:20px 13px}.theme-picker{gap:5px}.theme-option{padding:8px 5px}.studio-footer{padding:16px 13px}.studio-download{min-width:0;width:100%}.studio-buttons{flex-direction:column}.report-head,.card{padding:18px}.verdict{margin-inline:18px}.stats{margin-inline:18px}.report-actions{padding-inline:18px}}
+@media(hover:none) and (pointer:coarse){button,.btn,.repo-link,.theme-option{min-height:44px}input{font-size:16px}}
+@media print{body{background:#fff;color:#111}.hero,.nav,.studio-settings,.studio-buttons,.about,footer{display:none}.results{display:block!important}.report,.card,.studio{box-shadow:none;break-inside:avoid}}
+
 </style>
 </head>
 <body>
