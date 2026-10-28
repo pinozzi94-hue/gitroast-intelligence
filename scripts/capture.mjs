@@ -20,7 +20,17 @@ try {
     await route.fulfill({status:response.status,contentType:'application/json',headers:{'access-control-allow-origin':'*','cache-control':'no-store'},body});
   });
   await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
-  await page.waitForFunction(()=>document.getElementById('connectionText')?.textContent?.includes('Public GitHub API'),null,{timeout:60000});
+  try {
+    await page.waitForFunction(()=>document.getElementById('connectionText')?.textContent?.includes('Public GitHub API'),null,{timeout:45000});
+  } catch(e){
+    const failure=await page.evaluate(()=>({
+      heading:document.getElementById('headingUser')?.textContent,
+      notice:document.getElementById('noticeText')?.textContent,
+      connection:document.getElementById('connectionText')?.textContent
+    }));
+    console.error('Actual GitHub data did not load; no screenshots will be published',JSON.stringify({failure,responses}));
+    throw e;
+  }
   await page.waitForFunction(()=>document.querySelectorAll('#kpis .kpi').length===6);
   const details = await page.evaluate(()=>({
     username:document.getElementById('headingUser')?.textContent,
