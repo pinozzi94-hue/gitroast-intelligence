@@ -1,0 +1,36 @@
+{
+  "description": "Screenshots of the actual GitRoast UI rendered with unmodified, real public GitHub REST API responses.",
+  "captured_at": "2026-10-28T20:41:17.431Z",
+  "github_username": "pinozzi94-hue",
+  "github_profile": "https://github.com/pinozzi94-hue",
+  "source_api": "https://api.github.com",
+  "coverage": "Analyzed 2 / 2 repos",
+  "kpis": [
+    "Public repos▣CURRENT SNAPSHOT2Current snapshot · downloaded sample",
+    "Stars earned✦CURRENT SNAPSHOT0Current total · original public repos",
+    "Forks earned⑂CURRENT SNAPSHOT0Current total · original public repos",
+    "Followers◎CURRENT SNAPSHOT0Current public profile total",
+    "Active repos · 90d⌁CURRENT SNAPSHOT2Last push in previous 90 days",
+    "Recent events↗1Observed in last 30 days"
+  ],
+  "notice": null,
+  "api_responses": [
+    {
+      "path": "/users/pinozzi94-hue",
+      "status": 200
+    },
+    {
+      "path": "/users/pinozzi94-hue/repos",
+      "status": 200
+    },
+    {
+      "path": "/users/pinozzi94-hue/events/public",
+      "status": 200
+    }
+  ],
+  "screenshots": [
+    "assets/dashboard-desktop.png",
+    "assets/dashboard-mobile.png"
+  ],
+  "note": "Point-in-time public data, not a simulated analytics dataset; numbers will change."
+}
