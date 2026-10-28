@@ -1,79 +1,68 @@
 <div align="center">
 
-<img src="./assets/preview.svg" alt="GitRoast — Read between the commits" width="100%" />
+<img src="./assets/dashboard-preview.svg" alt="GitRoast Intelligence dashboard — illustrated sample data" width="100%" />
 
-# GitRoast
+# GitRoast Intelligence
 
-### Your GitHub tells a story. We read between the commits.
+**Your GitHub, decoded.** A refined, no-login analytics dashboard for any public GitHub profile.
 
-A polished, shareable developer signal report built from public GitHub data — repository health, language signature, standout work, and one tasteful roast.
-
-**No login · No backend · No tracking · No paid AI API**
+[Explore the dashboard](./index.html) · [Open the Roast Card Studio](./studio.html)
 
 </div>
 
 ---
 
-## What it does
+## An actual analytics workspace, not a static landing page
 
-Enter any public GitHub username. GitRoast reads public profile and repository metadata directly from GitHub, analyzes it in the browser, and turns it into a visual report.
+GitRoast Intelligence turns **public GitHub profile, repository and event data** into a clear, interactive dashboard. Inspired by professional product analytics, built specifically for developer portfolios.
 
-The report includes:
+- **Profile overview:** public avatar, bio, location/company when provided, join year, followers and a clearly marked *heuristic* portfolio signal.
+- **Live KPIs:** public repositories in the downloaded sample, total stars, received forks, followers, recently active repositories and observed public events.
+- **Activity analytics:** recent public events plotted by day with 7-, 30- and 90-day windows. Event stream labeled by type and repository.
+- **Language distribution:** interactive-style donut and legend based on the **primary language of each original public repository**, not lines of code.
+- **Repository intelligence:** searchable, sortable, paginated table with metadata, stars, forks, last push and archived/stale signals.
+- **Engagement ranking:** original repositories ranked by their stars.
+- **Portfolio hygiene:** clear visual signals for descriptions, maintenance, originality and archived status.
+- **Insights:** contextual, local heuristics and one intentionally playful GitRoast verdict.
+- **Export:** download repo analytics as a CSV, or open the retained **Roast Card Studio** for customized 1600×900 SVG and PNG cards.
+- **Share:** permalinks using `?u=github-username`.
 
-- **Developer signal score** based on public repository signals
-- **Repository health** for documentation, freshness, originality and maintenance
-- **Language signature** across original public repositories
-- **Repository spotlight** for projects with the strongest activity/star signal
-- **Deterministic roast engine** — playful, repeatable, and not AI-generated
-- **Share Card Studio** with three art-directed palettes — Ember, Aurora and Nebula\n- **Live card preview** with theme switching\n- **1600×900 SVG and PNG export** designed for portfolios and social sharing
-- **Shareable permalinks** using <code>?u=username</code>
+## Design
 
-## Why GitRoast
+Dark professional dashboard, persistent sidebar navigation, modular cards, vector data visualizations, real empty states, compact typography and responsive layouts. No charting framework required.
 
-Most GitHub profile analyzers look like dashboards. GitRoast is designed like a product.
+## How to use
 
-The goal is to make public developer data **fast to understand, visually memorable and worth sharing**, while staying completely free to run.
+Open `index.html` in a browser, or start a local server:
 
-## Zero-cost architecture
+```bash
+npm install
+npm run dev
+```
 
-GitRoast is intentionally tiny:
+Enter any valid public GitHub username to inspect that account. The site initially loads the author's own public profile.
 
-- Vanilla HTML, CSS and JavaScript
-- GitHub public REST API
-- No server
-- No database
-- No auth
-- No analytics
-- No API key
-- No paid infrastructure
+The existing share-card experience is preserved as `studio.html`. If you open the dashboard with `?u=username`, links to the Studio carry the same username.
 
-Everything happens in the visitor's browser.
+## Honest data limitations
 
-## Quality checks\n\nEvery push to `main` is automatically tested by GitHub Actions for JavaScript validity, SVG generation, theme differentiation, data scoring and export paths. Run `node scripts/verify.mjs` locally.\n\nThe analysis requests up to 300 public repositories and displays its coverage, since GitHub unauthenticated API rate limits apply.\n\n## Run locally
+- Everything is public data fetched from GitHub's REST API, **not private profile information**.
+- GitHub's unauthenticated API rate limits apply, and individual requests can fail.
+- Repository pagination is capped at **500 repositories**. The dashboard shows how many public repositories were actually downloaded; metrics may be partial.
+- Recent public events are subject to GitHub's event history and pagination limits. These **are not all contributions**, and the activity chart never claims to show the contribution calendar.
+- The language chart counts the **primary language of repositories**, not actual byte share or lines of code.
+- The *portfolio signal* and roasts are playful heuristics, **not measurements of engineering competence**.
+- Revenue, unique visitors, conversion, personal financial data and private repositories **are not displayed**, because GitHub's public profile API does not provide those figures.
+- The README artwork is an **illustration with sample data**, not the author's actual account metrics.
 
-You can open <code>index.html</code> directly or use any static file server.
+## Privacy, cost and stack
 
-With Node installed:
+Vanilla HTML / CSS / JavaScript · GitHub REST API · SVG charts · no database · no telemetry · no backend · no paid API. Requests go directly from the visitor's browser to GitHub. No GitHub login or access token is required.
 
-    npm install
-    npm run dev
+## Tests
 
-## Privacy
-
-GitRoast only requests public GitHub information for the username entered by the visitor. Nothing is stored by this project.
-
-GitHub's unauthenticated public API rate limits still apply.
-
-## A note about the score
-
-The score is a playful product metric derived from public repository signals. It is **not** an assessment of engineering ability, employability, seniority or professional value.
+`node scripts/verify.mjs` checks syntax, required controls, links, value-safe markup, pagination and the retained Studio's theme/SVG logic. GitHub Actions runs verification on every push and pull request.
 
 ## License
 
-MIT
-
----
-
-<div align="center">
-Built to be shared. Designed to cost nothing.
-</div>
+MIT — open source and free to run.
