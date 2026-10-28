@@ -1,18 +1,26 @@
 {
-  "name": "gitroast",
-  "version": "2.0.0",
+  "name": "gitroast-intelligence",
+  "version": "3.1.0",
   "private": true,
-  "description": "A polished, shareable GitHub developer signal report built from public repository data.",
-  "keywords": ["github", "developer-tools", "profile", "analytics", "svg", "open-source"],
+  "type": "module",
+  "description": "A public GitHub analytics dashboard with transparent data provenance and an SVG/PNG Card Studio.",
+  "keywords": [
+    "github",
+    "analytics",
+    "dashboard",
+    "open-source",
+    "svg",
+    "developer-tools"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/pinozzi94-hue/Chat-AI-Template-TypeScript-React.git"
   },
-  "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node scripts/verify.mjs"
   },
   "devDependencies": {
     "vite": "^8.3.1"
