@@ -49,4 +49,17 @@ console.log('✓ Dashboard and Studio JavaScript syntax');
 console.log('✓ Navigation, data visualization, filters, accessibility and export controls');
 console.log('✓ Repository stats, input validation and safe HTML output');
 console.log('✓ Preserved Studio SVG/PNG export, XML safety and distinct themes');
+
+for (const [label,html] of [['dashboard',dashboard],['studio',studio]]) {
+  for (const breakpoint of ['max-width:760px','max-width:380px','min-width:1900px']) {
+    assert.ok(html.includes(breakpoint),label+' must support '+breakpoint);
+  }
+  assert.ok(html.includes('pointer:coarse'),label+' must have touch-friendly controls');
+  assert.ok(html.includes('overflow-x:clip'),label+' must prevent page-wide horizontal scrolling');
+}
+const readme=read('../README.md');
+assert.ok(readme.includes('npm run dev')&&readme.includes('python -m http.server 4173'),'Startup instructions missing');
+assert.ok(readme.includes('Repository Settings')&&readme.includes('gitroast-intelligence'),'Rename guidance missing');
+console.log('✓ Responsive screen breakpoints, touch accessibility and complete startup guide');
+
 console.log('All quality checks passed.');
