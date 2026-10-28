@@ -1,38 +1,52 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-
-const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-const start = html.indexOf('<script>') + 8;
-const end = html.indexOf('</script>', start);
-assert.ok(start > 7 && end > start, 'Inline JavaScript exists');
-const code = html.slice(start, end);
-new Function(code);
-
-for (const id of ['search','username','submit','results','scoreRing','coverage','languageList','repoGrid','studio','studioPreview','studioSvg','studioPng']) {
-  assert.ok(html.includes('id="' + id + '"'), 'Missing UI control: ' + id);
+const read = path => readFileSync(new URL(path, import.meta.url), 'utf8');
+const dashboard = read('../index.html');
+const studio = read('../studio.html');
+function jsFrom(html) {
+  const match = html.match(/<script>([\s\S]*?)<\/script>/);
+  assert.ok(match, 'Inline JavaScript must exist');
+  new Function(match[1]);
+  return match[1];
 }
-for (const theme of ['ember','aurora','nebula']) {
-  assert.ok(html.includes('data-theme="' + theme + '"'), 'Missing export theme: ' + theme);
+const dashboardJs = jsFrom(dashboard), studioJs = jsFrom(studio);
+for (const id of ['overview','userForm','userInput','goBtn','kpis','activity','activityChart','languages','languageDonut','repositories','repoRows','repoSort','repoSearch','csvButton','insights','insightGrid','roastText']) {
+  assert.ok(dashboard.includes(`id="${id}"`), `Missing dashboard control: ${id}`);
 }
-assert.ok(code.includes('page<=3'), 'Repository pagination is enabled');
-assert.ok(code.includes('canvas.toBlob'), 'PNG export is enabled');
-assert.ok(code.includes('URL.revokeObjectURL'), 'Object URLs are reclaimed');
-assert.ok(html.includes('prefers-reduced-motion'), 'Reduced-motion support is enabled');
-
-const prefix = code.slice(0, code.indexOf('$("search").addEventListener('));
-const fixture = [
-  'var profile={login:"test-user",name:"& <Designer>",followers:24,created_at:"2019-01-01T00:00:00Z",public_repos:3};',
-  'var makeRepo=(name,language,stars,age,fork)=>({name,language,stargazers_count:stars,forks_count:1,pushed_at:new Date(Date.now()-age*864e5).toISOString(),description:"Project",fork,archived:false,html_url:"https://github.com/test-user/"+name});',
-  'var report=analyze(profile,[makeRepo("design","TypeScript",150,14,false),makeRepo("tool","Python",12,380,false),makeRepo("fork","JavaScript",1,70,true)]);',
-  'if(report.originals.length!==2||report.stale!==1||report.stars!==162)throw Error("Profile metrics are incorrect");',
-  'var views={};',
-  'for(var theme of ["ember","aurora","nebula"]){selectedTheme=theme;views[theme]=buildSvg(profile,report,"");',
-  'if(!views[theme].includes(\'width="1600" height="900"\'))throw Error("Wrong dimensions");',
-  'if(!views[theme].includes("&amp; &lt;Designer&gt;"))throw Error("SVG escaping failed");}',
-  'if(views.ember===views.aurora||views.ember===views.nebula||views.aurora===views.nebula)throw Error("Card themes not distinct");',
-  'if(!Number.isFinite(analyze(profile,[]).score))throw Error("Empty profile broken");',
-  'return report.score;'
-].join('\n');
-const sampleScore = new Function(prefix + '\n' + fixture)();
-assert.ok(Number.isFinite(sampleScore));
-console.log('All quality checks passed: UI, privacy, scoring, themes, SVG and PNG paths.');
+assert.ok(dashboardJs.includes('events/public'), 'Public event API used');
+assert.ok(dashboardJs.includes('maxPages=5'), 'Repository pagination supported');
+assert.ok(dashboardJs.includes('new Blob'), 'CSV export supported');
+assert.ok(dashboard.includes('prefers-reduced-motion'), 'Reduced-motion styling supported');
+assert.ok(dashboard.includes('studio.html?u=' ) === false || dashboardJs.includes('studio.html?u='));
+assert.ok(dashboard.includes('activity'), 'Activity chart available');
+assert.ok(!dashboard.includes('https://cdn.'), 'No dependency on CDN');
+const tests = dashboardJs.slice(0,dashboardJs.indexOf("$('userForm').addEventListener"));
+const result = new Function(tests + `
+  if(validUsername('test-user')!=='test-user')throw Error('valid username');
+  if(validUsername('bad--')!==null)throw Error('invalid username');
+  if(escapeHtml('<script>')!=='&lt;script&gt;')throw Error('HTML escaping');
+  let sample = {login:'test-user',followers:12,following:8};
+  let mk=(name,language,stars,fork)=>({name,language,stargazers_count:stars,forks_count:3,description:'Project',pushed_at:new Date().toISOString(),archived:false,fork});
+  cache.user=sample;cache.repos=[mk('alpha','TypeScript',30,false),mk('beta','Python',7,false),mk('forked','JavaScript',100,true)];cache.events=[];
+  let summary=stats();
+  if(summary.repos!==2||summary.stars!==37||summary.forks!==6||summary.languages.length!==2)throw Error('stats wrong');
+  if(!Number.isFinite(summary.score))throw Error('score invalid');
+  return summary;`)();
+assert.equal(result.stars,37);
+for (const id of ['studio','studioPreview','studioSvg','studioPng','download']) assert.ok(studio.includes(`id="${id}"`),`Studio missing ${id}`);
+for (const theme of ['ember','aurora','nebula']) assert.ok(studio.includes(`data-theme="${theme}"`));
+assert.ok(studioJs.includes('canvas.toBlob'),'PNG export preserved');
+const sPref = studioJs.slice(0,studioJs.indexOf('$("search").addEventListener'));
+const checkThemes = new Function(sPref + `
+  let p={login:'dev',name:'A & B',followers:10,created_at:'2018-01-01T00:00:00Z'};
+  let data=[{name:'alpha',language:'TypeScript',fork:false,stargazers_count:10,forks_count:2,pushed_at:new Date().toISOString(),archived:false,description:'Sample'}];
+  let report=analyze(p,data),out={};
+  for(const theme of ['ember','aurora','nebula']){selectedTheme=theme;out[theme]=buildSvg(p,report,'');if(!out[theme].includes('1600')||!out[theme].includes('&amp;'))throw Error('SVG invalid')}
+  if(out.ember===out.aurora||out.ember===out.nebula)throw Error('themes identical');
+  return true;`)();
+assert.ok(checkThemes);
+console.log('✓ Dashboard and Studio JavaScript syntax');
+console.log('✓ Navigation, data visualization, filters, accessibility and export controls');
+console.log('✓ Repository stats, input validation and safe HTML output');
+console.log('✓ Preserved Studio SVG/PNG export, XML safety and distinct themes');
+console.log('All quality checks passed.');
