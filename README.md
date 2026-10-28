@@ -1,45 +1,79 @@
-# 🔥 GitRoast
+<div align="center">
 
-> **Your GitHub profile, roasted by the numbers.**
+<img src="./assets/preview.svg" alt="GitRoast — Read between the commits" width="100%" />
 
-GitRoast turns any public GitHub profile into a fast, shareable roast based on real repository stats — stars, stale repos, descriptions, forks, languages and followers.
+# GitRoast
 
-**No login. No backend. No paid AI API. No tracking.**
+### Your GitHub tells a story. We read between the commits.
 
-## Why this exists
+A polished, shareable developer signal report built from public GitHub data — repository health, language signature, standout work, and one tasteful roast.
 
-Developer tools are often useful but visually boring. GitRoast is deliberately built to be the opposite: one input, one instant result, one shareable card.
+**No login · No backend · No tracking · No paid AI API**
 
-## Features
+</div>
 
-- 🔥 Deterministic roast engine based on public GitHub data
-- 📊 Profile heat score and useful repo statistics
-- 🧟 Detects stale repositories
-- 🫥 Finds repositories with missing descriptions
-- 🧬 Shows language “DNA”
-- 🖼️ Exports a shareable SVG roast card
-- 🔗 Share button with a permalink (`?u=username`)
-- ⚡ Client-side only — zero server cost
-- 🔐 No GitHub login or token required
+---
+
+## What it does
+
+Enter any public GitHub username. GitRoast reads public profile and repository metadata directly from GitHub, analyzes it in the browser, and turns it into a visual report.
+
+The report includes:
+
+- **Developer signal score** based on public repository signals
+- **Repository health** for documentation, freshness, originality and maintenance
+- **Language signature** across original public repositories
+- **Repository spotlight** for projects with the strongest activity/star signal
+- **Deterministic roast engine** — playful, repeatable, and not AI-generated
+- **Premium 1600×900 SVG export** designed for portfolios and social sharing
+- **Shareable permalinks** using <code>?u=username</code>
+
+## Why GitRoast
+
+Most GitHub profile analyzers look like dashboards. GitRoast is designed like a product.
+
+The goal is to make public developer data **fast to understand, visually memorable and worth sharing**, while staying completely free to run.
+
+## Zero-cost architecture
+
+GitRoast is intentionally tiny:
+
+- Vanilla HTML, CSS and JavaScript
+- GitHub public REST API
+- No server
+- No database
+- No auth
+- No analytics
+- No API key
+- No paid infrastructure
+
+Everything happens in the visitor's browser.
 
 ## Run locally
 
-Open `index.html` directly, or serve the repository with any static server. If you already have Node installed, `npm run dev` also works with the included Vite setup.
+You can open <code>index.html</code> directly or use any static file server.
 
-## How it works
+With Node installed:
 
-GitRoast calls GitHub's public REST API directly from the browser and computes the result locally. The roast is intentionally playful; the score is not an assessment of professional ability.
-
-Unauthenticated GitHub API rate limits apply.
-
-## Stack
-
-Vanilla JavaScript · HTML/CSS · GitHub REST API
+    npm install
+    npm run dev
 
 ## Privacy
 
-GitRoast only reads public GitHub information requested by the visitor. It has no database, analytics, cookies or backend.
+GitRoast only requests public GitHub information for the username entered by the visitor. Nothing is stored by this project.
+
+GitHub's unauthenticated public API rate limits still apply.
+
+## A note about the score
+
+The score is a playful product metric derived from public repository signals. It is **not** an assessment of engineering ability, employability, seniority or professional value.
 
 ## License
 
 MIT
+
+---
+
+<div align="center">
+Built to be shared. Designed to cost nothing.
+</div>
