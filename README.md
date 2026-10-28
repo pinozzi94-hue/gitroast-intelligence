@@ -25,7 +25,7 @@ The report includes:
 - **Language signature** across original public repositories
 - **Repository spotlight** for projects with the strongest activity/star signal
 - **Deterministic roast engine** — playful, repeatable, and not AI-generated
-- **Premium 1600×900 SVG export** designed for portfolios and social sharing
+- **Share Card Studio** with three art-directed palettes — Ember, Aurora and Nebula\n- **Live card preview** with theme switching\n- **1600×900 SVG and PNG export** designed for portfolios and social sharing
 - **Shareable permalinks** using <code>?u=username</code>
 
 ## Why GitRoast
@@ -49,7 +49,7 @@ GitRoast is intentionally tiny:
 
 Everything happens in the visitor's browser.
 
-## Run locally
+## Quality checks\n\nEvery push to `main` is automatically tested by GitHub Actions for JavaScript validity, SVG generation, theme differentiation, data scoring and export paths. Run `node scripts/verify.mjs` locally.\n\nThe analysis requests up to 300 public repositories and displays its coverage, since GitHub unauthenticated API rate limits apply.\n\n## Run locally
 
 You can open <code>index.html</code> directly or use any static file server.
 
