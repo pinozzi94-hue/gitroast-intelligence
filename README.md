@@ -18,7 +18,13 @@ GitRoast turns GitHub public profile, repository and event API responses into a 
 
 ## Screenshots — only from the real app
 
-The [browser capture workflow](./.github/workflows/capture.yml) opens the actual committed website in Chromium and retrieves the author's real public GitHub data. [Its capture script](./scripts/capture.mjs) saves both PNGs and source metadata. **Screenshots will only appear here once those real files are verified on GitHub.** No illustrated or fabricated dashboards are presented as the product.
+These images were **captured by Chromium running the actual committed application**. The dashboard loaded the real public profile `pinozzi94-hue` using genuine GitHub REST API responses. No sample metrics, stock images or generated dashboard art.
+
+![Actual GitRoast Intelligence dashboard, desktop screenshot with public GitHub data](./assets/dashboard-desktop.png)
+
+[View actual mobile screenshot](./assets/dashboard-mobile.png) · [Inspect screenshot timestamp, KPI values and HTTP provenance](./assets/screenshot-source.json)
+
+**Capture:** 28 October 2026, 20:41 UTC. **Coverage:** 2 of 2 public repositories. These are point-in-time results; today's counts can differ. The [capture workflow](./.github/workflows/capture.yml) runs the site in Chromium and regenerates both screenshots from real GitHub data after changes to the app.
 
 ## Run locally
 
