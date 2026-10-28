@@ -1,11 +1,13 @@
-import { chromium } from 'playwright';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { chromium } from 'playwright-core';
+import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 
 const username = 'pinozzi94-hue';
 const url = 'http://127.0.0.1:4173/?u=' + encodeURIComponent(username);
 const apiToken = process.env.GITHUB_TOKEN;
 if (!apiToken) throw new Error('GITHUB_TOKEN is required to retrieve real public GitHub data for screenshot capture.');
-const browser = await chromium.launch({headless:true,args:['--no-sandbox']});
+const chrome = ['/usr/bin/google-chrome','/usr/bin/google-chrome-stable','/usr/bin/chromium','/opt/google/chrome/chrome'].find(existsSync);
+if(!chrome)throw Error('No system Chrome browser found: cannot capture verifiable screenshots.');
+const browser = await chromium.launch({executablePath:chrome,headless:true,args:['--no-sandbox']});
 const responses = [];
 try {
   const page = await browser.newPage({viewport:{width:1440,height:960},deviceScaleFactor:1});
