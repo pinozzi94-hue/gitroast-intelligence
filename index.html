@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101115">
-<meta name="description" content="GitRoast Intelligence — a beautiful real-time dashboard for any public GitHub profile. Repository analytics, activity, language mix, portfolio signals and shareable roast cards. No login or tracking.">
+<meta name="description" content="GitRoast Intelligence — a public GitHub analytics dashboard for any public GitHub profile. Repository analytics, activity, language mix, portfolio signals and shareable roast cards. No login or tracking.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="GitRoast Intelligence — your GitHub, decoded">
 <meta property="og:description" content="Explore real public GitHub signals in a sleek interactive analytics dashboard. Free, private and open source.">
@@ -28,7 +28,7 @@
 @media(max-width:430px){.donut-layout{grid-template-columns:1fr}.donut{height:205px}.lang-key{display:grid;grid-template-columns:1fr 1fr}.kpi .value{font-size:23px}.kpi{padding:13px 12px}.head-row h1{font-size:26px}.profile-facts{gap:8px}.section-sub{display:none}.insight-card{min-height:145px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 @media(max-width:760px){.topbar{gap:7px}.topbar .crumb{min-width:0;flex:1;overflow:hidden;white-space:nowrap}.topbar .crumb span{display:none}.top-right{flex-shrink:0}.time-tag{padding:7px 8px}.external{padding:6px}}
-</style>
+.kpi-snapshot{height:40px;display:flex;align-items:center;font:700 9px ui-monospace,Menlo,monospace;letter-spacing:.09em;color:#6d6f79;border-bottom:1px solid #292b31;margin-bottom:8px}\n</style>
 </head>
 <body>
 <div class="app">
@@ -105,6 +105,7 @@ async function loadProfile(raw){let username=validUsername(raw);if(!username){no
   if(user.type!=='User'&&user.type!=='Organization'){notice('Public account','This public account is an organization, so follower and event data may look different.')}
   let pages=await Promise.all([getPages(API+'/users/'+encodeURIComponent(user.login)+'/repos?type=owner&sort=pushed',signal,5),getPages(API+'/users/'+encodeURIComponent(user.login)+'/events/public',signal,3)]);
   if(gen!==generation)return;
+  if(pages[0].failed&&pages[0].items.length===0)throw Error('Repository data could not be retrieved. Dashboard totals cannot be calculated reliably.');
   cache.user=user;cache.repos=pages[0].items;cache.events=pages[1].items;cache.repoTotal=user.public_repos||0;cache.reposComplete=pages[0].complete&&cache.repos.length>=cache.repoTotal;cache.eventsComplete=pages[1].complete;cache.eventsError=pages[1].failed;cache.eventsRetrieved=cache.events.length;
   tablePage=0;$('repoSearch').value='';$('repoSort').value='stars';$('userInput').value=user.login;
   let url=new URL(location.href);url.searchParams.set('u',user.login);history.replaceState({},'',url);
@@ -114,16 +115,16 @@ async function loadProfile(raw){let username=validUsername(raw);if(!username){no
   else if(cache.eventsError)notice('Activity data is limited','Repository data loaded, but public activity could not be retrieved. Activity widgets show unavailable rather than invented numbers.');
 }catch(e){if(e.name==='AbortError'||gen!==generation)return;notice('Could not load profile',e.message);$('headingUser').textContent='Unavailable';$('subtitle').textContent='Try another public GitHub username';$('connectionDot').style.background='#ff668d';$('connectionText').textContent='API unavailable';$('kpis').innerHTML='<div class="no-data">Enter a username to try again.</div>'}finally{if(gen===generation){$('goBtn').disabled=false;$('goBtn').textContent='Analyze ↗'}}}
 function spark(values,color){if(!values?.length)return'';let w=155,h=34,max=Math.max(1,...values),step=w/Math.max(1,values.length-1),coords=values.map((v,i)=>[i*step,h-v/max*(h-4)-2]),points=coords.map(x=>x.join(',')).join(' ');return'<svg class="mini-chart" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true"><polyline points="'+points+'" fill="none" stroke="'+color+'" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><polygon points="0,'+h+' '+points+' '+w+','+h+'" fill="'+color+'" fill-opacity=".055"/></svg>'}
-function historySeries(repos,fn,n=10){let bins=Array(n).fill(0);for(let r of repos){let d=daysAgo(r.pushed_at);if(d>=0&&d<n*36){let idx=n-1-Math.floor(d/36);if(idx>=0)bins[idx]+=fn(r)}}return bins}
+
 function eventSeries(n){let now=new Date(),data=Array(n).fill(0);for(let e of cache.events){let d=Math.floor(daysAgo(e.created_at));if(d>=0&&d<n)data[n-1-d]++}return data}
 function renderKpis(s){let cards=[
- ['Public repos',s.publicRepos,historySeries(cache.repos,()=>1),'#ff874c','All downloaded repositories'],
- ['Stars earned',s.stars,historySeries(originals(),r=>r.stargazers_count||0),'#36cda1','Across original public repos'],
- ['Forks earned',s.forks,historySeries(originals(),r=>r.forks_count||0),'#4bb7f0','Received by original repos'],
- ['Followers',s.followers,null,'#ff668d','Public profile total'],
- ['Active repos · 90d',s.active,historySeries(originals().filter(r=>daysAgo(r.pushed_at)<=90),()=>1),'#f2c76b','Pushed within last 90 days'],
+ ['Public repos',s.publicRepos,null,'#ff874c','Current snapshot · downloaded sample'],
+ ['Stars earned',s.stars,null,'#36cda1','Current total · original public repos'],
+ ['Forks earned',s.forks,null,'#4bb7f0','Current total · original public repos'],
+ ['Followers',s.followers,null,'#ff668d','Current public profile total'],
+ ['Active repos · 90d',s.active,null,'#f2c76b','Last push in previous 90 days'],
  ['Recent events',cache.eventsError?'—':s.events,eventSeries(Math.min(chartDays,14)),'#a894fc',cache.eventsError?'Data unavailable':'Observed in last '+chartDays+' days']
- ];$('kpis').innerHTML=cards.map((c,i)=>'<div class="kpi"><div class="k-label"><span>'+c[0]+'</span><span class="k-icon">'+['▣','✦','⑂','◎','⌁','↗'][i]+'</span></div>'+(c[2]?spark(c[2],c[3]):'<svg class="mini-chart" viewBox="0 0 155 34" aria-hidden="true"><path d="M0 18H155" stroke="'+c[3]+'" stroke-opacity=".33" stroke-dasharray="4 6"/></svg>')+'<div class="value">'+(typeof c[1]==='number'?compact(c[1]):c[1])+'</div><div class="foot">'+escapeHtml(c[4])+'</div></div>').join('')}
+ ];$('kpis').innerHTML=cards.map((c,i)=>'<div class="kpi"><div class="k-label"><span>'+c[0]+'</span><span class="k-icon">'+['▣','✦','⑂','◎','⌁','↗'][i]+'</span></div>'+(c[2]?spark(c[2],c[3]):'<div class="kpi-snapshot" aria-hidden="true">CURRENT SNAPSHOT</div>')+'<div class="value">'+(typeof c[1]==='number'?compact(c[1]):c[1])+'</div><div class="foot">'+escapeHtml(c[4])+'</div></div>').join('')}
 function renderProfile(s){let u=cache.user;$('breadUser').textContent='@'+u.login;$('headingUser').textContent=u.login;$('subtitle').textContent='Public GitHub intelligence · '+(cache.reposComplete?'Complete repository coverage':'Partial repository coverage')+' · Updated '+new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'});
   $('avatar').src=u.avatar_url;$('avatar').alt='Avatar of @'+u.login;$('displayName').textContent=u.name||u.login;$('loginText').textContent='@'+u.login;$('profileBio').textContent=u.bio||'No public bio provided by this account.';
   $('factCompany').innerHTML=u.company?'▦ <b>'+escapeHtml(u.company)+'</b>':'';$('factLocation').innerHTML=u.location?'⌁ <b>'+escapeHtml(u.location)+'</b>':'';$('factSince').innerHTML='◷ Joined <b>'+new Date(u.created_at).getFullYear()+'</b>';$('factFollowers').innerHTML='◉ <b>'+fmt(u.followers)+' followers</b>';
