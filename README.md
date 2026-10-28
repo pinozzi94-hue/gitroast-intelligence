@@ -1,68 +1,63 @@
-<div align="center">
-
-<img src="./assets/dashboard-preview.svg" alt="GitRoast Intelligence dashboard — illustrated sample data" width="100%" />
-
 # GitRoast Intelligence
 
-**Your GitHub, decoded.** A refined, no-login analytics dashboard for any public GitHub profile.
+**A real analytics dashboard for public GitHub profiles. No fabricated traffic, earnings, trendlines or user metrics.**
 
-[Explore the dashboard](./index.html) · [Open the Roast Card Studio](./studio.html)
+GitRoast turns GitHub public profile, repository and event API responses into a responsive developer dashboard. The original card creator is preserved as [Card Studio](./studio.html), with themed SVG/PNG exports.
 
-</div>
+**Status:** public source · automated tests · no paid API · GitHub Pages hosting not enabled.
 
----
+## What actually works
 
-## An actual analytics workspace, not a static landing page
+- **Public profile:** avatar, username, display name, bio, publicly provided company/location, join year, follower count.
+- **Current snapshot KPIs:** sampled public repositories, stars and forks on original repos, followers, recently pushed repos, observed events.
+- **Public event timeline:** 7/30/90-day plot of the actual available event records. Not GitHub's complete contribution graph.
+- **Primary language distribution:** counts of original repositories by their main language, not byte shares.
+- **Repository explorer:** search, sorting, pagination, archived/fork/stale labels, stars, forks, latest push.
+- **Health & insights:** documented rule-based portfolio observations and a playful roast, not a skill score.
+- **Exports:** actual sampled repo data to CSV and the preserved Studio for SVG/PNG report cards.
 
-GitRoast Intelligence turns **public GitHub profile, repository and event data** into a clear, interactive dashboard. Inspired by professional product analytics, built specifically for developer portfolios.
+## Screenshots — only from the real app
 
-- **Profile overview:** public avatar, bio, location/company when provided, join year, followers and a clearly marked *heuristic* portfolio signal.
-- **Live KPIs:** public repositories in the downloaded sample, total stars, received forks, followers, recently active repositories and observed public events.
-- **Activity analytics:** recent public events plotted by day with 7-, 30- and 90-day windows. Event stream labeled by type and repository.
-- **Language distribution:** interactive-style donut and legend based on the **primary language of each original public repository**, not lines of code.
-- **Repository intelligence:** searchable, sortable, paginated table with metadata, stars, forks, last push and archived/stale signals.
-- **Engagement ranking:** original repositories ranked by their stars.
-- **Portfolio hygiene:** clear visual signals for descriptions, maintenance, originality and archived status.
-- **Insights:** contextual, local heuristics and one intentionally playful GitRoast verdict.
-- **Export:** download repo analytics as a CSV, or open the retained **Roast Card Studio** for customized 1600×900 SVG and PNG cards.
-- **Share:** permalinks using `?u=github-username`.
+The [browser capture workflow](./.github/workflows/capture.yml) opens the actual committed website in Chromium and retrieves the author's real public GitHub data. [Its capture script](./scripts/capture.mjs) saves both PNGs and source metadata. **Screenshots will only appear here once those real files are verified on GitHub.** No illustrated or fabricated dashboards are presented as the product.
 
-## Design
+## Run locally
 
-Dark professional dashboard, persistent sidebar navigation, modular cards, vector data visualizations, real empty states, compact typography and responsive layouts. No charting framework required.
-
-## How to use
-
-Open `index.html` in a browser, or start a local server:
+Open a terminal from the repository root:
 
 ```bash
-npm install
-npm run dev
+python3 -m http.server 4173
 ```
 
-Enter any valid public GitHub username to inspect that account. The site initially loads the author's own public profile.
+Visit http://localhost:4173. Or run `npm install && npm run dev` with Node.js. The page initially requests the public profile `pinozzi94-hue`; search for any public GitHub username. Permalinks use `?u=username`.
 
-The existing share-card experience is preserved as `studio.html`. If you open the dashboard with `?u=username`, links to the Studio carry the same username.
+## Where the data comes from
 
-## Honest data limitations
+| Metric | Source | Important limitation |
+| --- | --- | --- |
+| Profile/followers | `GET /users/{username}` | Public data only |
+| Repositories, stars, forks, statuses | `GET /users/{username}/repos` | Up to 500 downloaded repos; partial coverage disclosed |
+| Language donut | Primary `language` on original public repos | Not lines of code |
+| Activity timeline | `GET /users/{username}/events/public` | Visible public events only; not all contributions |
+| Signal and roast | Local rule-based heuristics | Not a professional assessment |
 
-- Everything is public data fetched from GitHub's REST API, **not private profile information**.
-- GitHub's unauthenticated API rate limits apply, and individual requests can fail.
-- Repository pagination is capped at **500 repositories**. The dashboard shows how many public repositories were actually downloaded; metrics may be partial.
-- Recent public events are subject to GitHub's event history and pagination limits. These **are not all contributions**, and the activity chart never claims to show the contribution calendar.
-- The language chart counts the **primary language of repositories**, not actual byte share or lines of code.
-- The *portfolio signal* and roasts are playful heuristics, **not measurements of engineering competence**.
-- Revenue, unique visitors, conversion, personal financial data and private repositories **are not displayed**, because GitHub's public profile API does not provide those figures.
-- The README artwork is an **illustration with sample data**, not the author's actual account metrics.
+**GitHub public profile data does not contain** visitor counts, revenue, conversion rates, historic star/follower growth, complete contribution histories, or private repositories. The dashboard does not fabricate them. Static KPIs are marked as current snapshots.
 
-## Privacy, cost and stack
+For all details, see **[Data sources, limitations & screenshot provenance](./docs/DATA_SOURCES.md)**.
 
-Vanilla HTML / CSS / JavaScript · GitHub REST API · SVG charts · no database · no telemetry · no backend · no paid API. Requests go directly from the visitor's browser to GitHub. No GitHub login or access token is required.
+## Test and verification
 
-## Tests
+```bash
+npm test
+```
 
-`node scripts/verify.mjs` checks syntax, required controls, links, value-safe markup, pagination and the retained Studio's theme/SVG logic. GitHub Actions runs verification on every push and pull request.
+or `node scripts/verify.mjs`. The [quality workflow](./.github/workflows/quality.yml) checks syntax, navigation, data metrics, SVG/PNG export paths and public API usage on every push.
+
+## Privacy, costs and availability
+
+The browser calls the GitHub API directly; there is no account sign-in, database, telemetry or paid AI service. The public API rate limits still apply. The screenshot capture uses a short-lived GitHub Actions token **in CI only** to retrieve unmodified public responses; that token is not embedded in the site.
+
+**There is not yet a verified hosted live demo.** A public GitHub repository is not itself a deployed website. GitHub Pages is not enabled. The existing repository slug remains `Chat-AI-Template-TypeScript-React` because the available GitHub connector does not expose the rename operation.
 
 ## License
 
-MIT — open source and free to run.
+[MIT](./LICENSE).
