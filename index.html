@@ -223,7 +223,7 @@ footer{border-top:1px solid #211d1a;min-height:112px;display:flex;align-items:ce
         </div>
         <div class="score-wrap">
           <div class="score-ring" id="scoreRing"><div class="score-value"><strong id="score"></strong><span>signal</span></div></div>
-          <div class="score-copy"><strong id="title"></strong><span>Calculated from public repositories</span></div>
+          <div class="score-copy"><strong id="title"></strong><span id="coverage">Calculated from public repositories</span></div>
         </div>
       </div>
 
@@ -346,7 +346,7 @@ let analyzedRepoCount = 0;
 
 function clamp(n,min,max){ return Math.max(min,Math.min(max,n)); }
 function pct(n,d){ return d ? Math.round((n/d)*100) : 0; }
-function ageDays(date){ return Math.max(0,(Date.now()-new Date(date).getTime())/864e5); }
+function ageDays(date){ if(!date)return Infinity; var diff=(Date.now()-new Date(date).getTime())/864e5; return Number.isFinite(diff)?Math.max(0,diff):Infinity; }
 function hash(str){ var h=2166136261; for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);} return h>>>0; }
 function escapeXml(value){ return String(value).replace(/[<>&"']/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;","'":"&apos;"}[c];}); }
 function fmt(n){ return new Intl.NumberFormat("en",{notation:n>=10000?"compact":"standard",maximumFractionDigits:1}).format(n); }
@@ -429,6 +429,8 @@ function render(user,a){
   $("displayName").textContent=user.name||user.login;
   $("handle").textContent="@"+user.login;
   $("score").textContent=a.score;
+  var totalPublic=Number(user.public_repos)||0;
+  $("coverage").textContent="Analyzed "+analyzedRepoCount+" of "+totalPublic+" public repos"+(analyzedRepoCount<totalPublic?" · first 300 max":"");
   $("scoreRing").style.setProperty("--score",a.score);
   $("title").textContent=a.title;
   $("roast").innerHTML='“'+escapeXml(a.roast).replace(/(stars|JavaScript|TypeScript|Python|README|GitHub|repositories|repository|fork)/gi,'<em>$1</em>')+'”';
@@ -472,13 +474,23 @@ async function load(name){
   try{
     var responses=await Promise.all([
       fetch(API+"/users/"+encodeURIComponent(clean),{headers:{Accept:"application/vnd.github+json"}}),
-      fetch(API+"/users/"+encodeURIComponent(clean)+"/repos?per_page=100&sort=updated&type=owner",{headers:{Accept:"application/vnd.github+json"}})
+      fetch(API+"/users/"+encodeURIComponent(clean)+"/repos?per_page=100&page=1&sort=updated&type=owner",{headers:{Accept:"application/vnd.github+json"}})
     ]);
     var uR=responses[0],rR=responses[1];
     if(uR.status===404)throw new Error("That GitHub user does not exist.");
     if(uR.status===403 || rR.status===403)throw new Error("GitHub's public API rate limit was reached. Try again a little later.");
     if(!uR.ok || !rR.ok)throw new Error("GitHub is not cooperating right now.");
     var user=await uR.json(),repos=await rR.json();
+    for(var page=2;page<=3 && repos.length===(page-1)*100;page++){
+      $("submit").textContent="Scanning page "+page+"/3…";
+      var next=await fetch(API+"/users/"+encodeURIComponent(clean)+"/repos?per_page=100&page="+page+"&sort=updated&type=owner",{headers:{Accept:"application/vnd.github+json"}});
+      if(!next.ok)break;
+      var batch=await next.json();
+      if(!Array.isArray(batch)||!batch.length)break;
+      repos=repos.concat(batch);
+      if(batch.length<100)break;
+    }
+    analyzedRepoCount=repos.length;
     $("username").value=user.login;
     render(user,analyze(user,repos));
     $("results").scrollIntoView({behavior:"smooth",block:"start"});
@@ -544,7 +556,7 @@ function buildSvg(user,a,avatarData){
   '<g font-family="Inter,Arial,sans-serif"><text x="112" y="658" fill="#73685f" font-size="14">TOTAL STARS</text><text x="112" y="704" fill="#f4eee8" font-size="34" font-weight="720">'+fmt(a.stars)+'</text>'+
   '<text x="335" y="658" fill="#73685f" font-size="14">ORIGINAL REPOS</text><text x="335" y="704" fill="#f4eee8" font-size="34" font-weight="720">'+a.originals.length+'</text>'+
   '<text x="582" y="658" fill="#73685f" font-size="14">ACTIVE · 90D</text><text x="582" y="704" fill="#f4eee8" font-size="34" font-weight="720">'+a.active90+'</text>'+
-  '<text x="800" y="658" fill="#73685f" font-size="14">PRIMARY STACK</text><text x="800" y="704" fill="#f4eee8" font-size="34" font-weight="720">'+escapeXml(a.top)+'</text></g>'+
+  '<text x="800" y="658" fill="#73685f" font-size="14">PRIMARY STACK</text><text x="800" y="704" fill="#f4eee8" font-size="34" font-weight="720">'+escapeXml(a.top.slice(0,13))+'</text></g>'+
   '<line x1="1020" y1="624" x2="1020" y2="792" stroke="#fff" stroke-opacity=".08"/>'+
   '<text x="1075" y="624" fill="#756a61" font-size="14" letter-spacing="2" font-family="Inter,Arial,sans-serif">LANGUAGE SIGNATURE</text>'+langSvg+
   '<text x="112" y="803" fill="#625950" font-size="14" font-family="Inter,Arial,sans-serif">Public GitHub data · generated locally in your browser</text><text x="1490" y="803" fill="#7a6e64" font-size="14" text-anchor="end" font-family="ui-monospace,Menlo,monospace">GitRoast · vector export</text>'+
