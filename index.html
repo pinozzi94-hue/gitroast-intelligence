@@ -435,7 +435,7 @@ function svgTextLines(text,maxChars,maxLines){
   return lines;
 }
 
-function buildSvg(user,a){
+function buildSvg(user,a,avatarData){
   var w=1600,h=900;
   var safeUser=escapeXml(user.login);
   var safeName=escapeXml(user.name||user.login);
@@ -464,7 +464,7 @@ function buildSvg(user,a){
   '<text x="154" y="116" fill="#f4eee8" font-size="25" font-weight="700" font-family="Inter,Arial,sans-serif">GitRoast</text>'+
   '<text x="1490" y="114" fill="#756a61" font-size="16" text-anchor="end" font-family="ui-monospace,Menlo,monospace">DEVELOPER SIGNAL REPORT</text>'+
   '<line x1="96" y1="156" x2="1504" y2="156" stroke="#fff" stroke-opacity=".08"/>'+
-  '<circle cx="166" cy="244" r="54" fill="#1d1713" stroke="#ff8750" stroke-opacity=".55"/><text x="166" y="258" text-anchor="middle" fill="#ffd6b6" font-size="38" font-weight="750" font-family="Inter,Arial,sans-serif">'+escapeXml(initials)+'</text>'+
+  (avatarData?'<defs><clipPath id="avatarClip"><rect x="112" y="190" width="108" height="108" rx="28"/></clipPath></defs><image href="'+escapeXml(avatarData)+'" x="112" y="190" width="108" height="108" preserveAspectRatio="xMidYMid slice" clip-path="url(#avatarClip)"/><rect x="112" y="190" width="108" height="108" rx="28" fill="none" stroke="#ff8750" stroke-opacity=".58"/>':'<circle cx="166" cy="244" r="54" fill="#1d1713" stroke="#ff8750" stroke-opacity=".55"/><text x="166" y="258" text-anchor="middle" fill="#ffd6b6" font-size="38" font-weight="750" font-family="Inter,Arial,sans-serif">'+escapeXml(initials)+'</text>')+
   '<text x="246" y="224" fill="#8c8076" font-size="17" font-family="ui-monospace,Menlo,monospace">@'+safeUser+'</text>'+
   '<text x="246" y="269" fill="#f5efe9" font-size="38" font-weight="730" font-family="Inter,Arial,sans-serif">'+safeName+'</text>'+
   '<text x="246" y="302" fill="#b19682" font-size="18" font-family="Inter,Arial,sans-serif">'+escapeXml(a.title)+'</text>'+
@@ -479,8 +479,22 @@ function buildSvg(user,a){
   '<text x="800" y="658" fill="#73685f" font-size="14">PRIMARY STACK</text><text x="800" y="704" fill="#f4eee8" font-size="34" font-weight="720">'+escapeXml(a.top)+'</text></g>'+
   '<line x1="1020" y1="624" x2="1020" y2="792" stroke="#fff" stroke-opacity=".08"/>'+
   '<text x="1075" y="624" fill="#756a61" font-size="14" letter-spacing="2" font-family="Inter,Arial,sans-serif">LANGUAGE SIGNATURE</text>'+langSvg+
-  '<text x="112" y="803" fill="#625950" font-size="14" font-family="Inter,Arial,sans-serif">Public GitHub data · generated locally in your browser</text><text x="1490" y="803" fill="#7a6e64" font-size="14" text-anchor="end" font-family="ui-monospace,Menlo,monospace">gitroast.dev / vector export</text>'+
+  '<text x="112" y="803" fill="#625950" font-size="14" font-family="Inter,Arial,sans-serif">Public GitHub data · generated locally in your browser</text><text x="1490" y="803" fill="#7a6e64" font-size="14" text-anchor="end" font-family="ui-monospace,Menlo,monospace">GitRoast · vector export</text>'+
   '</svg>';
+}
+
+async function imageDataUrl(url){
+  try{
+    var response=await fetch(url,{mode:"cors"});
+    if(!response.ok)return "";
+    var blob=await response.blob();
+    return await new Promise(function(resolve){
+      var reader=new FileReader();
+      reader.onload=function(){resolve(typeof reader.result==="string"?reader.result:"");};
+      reader.onerror=function(){resolve("");};
+      reader.readAsDataURL(blob);
+    });
+  }catch(e){return "";}
 }
 
 $("search").addEventListener("submit",function(e){e.preventDefault();load($("username").value);});
@@ -495,19 +509,29 @@ $("share").addEventListener("click",async function(){
   try{await navigator.clipboard.writeText(text+" "+url);toast("Share text copied");}catch(e){toast("Copy failed");}
 });
 
-$("download").addEventListener("click",function(){
+$("download").addEventListener("click",async function(){
   if(!current)return;
-  var svg=buildSvg(current.user,current.a);
-  var blob=new Blob([svg],{type:"image/svg+xml;charset=utf-8"});
-  var href=URL.createObjectURL(blob);
-  var link=document.createElement("a");
-  link.href=href;
-  link.download="gitroast-"+current.user.login+"-signal-report.svg";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(function(){URL.revokeObjectURL(href);},1200);
-  toast("Premium SVG exported");
+  var button=$("download");
+  var previous=button.innerHTML;
+  button.disabled=true;
+  button.textContent="Rendering vector…";
+  try{
+    var avatarData=await imageDataUrl(current.user.avatar_url);
+    var svg=buildSvg(current.user,current.a,avatarData);
+    var blob=new Blob([svg],{type:"image/svg+xml;charset=utf-8"});
+    var href=URL.createObjectURL(blob);
+    var link=document.createElement("a");
+    link.href=href;
+    link.download="gitroast-"+current.user.login+"-signal-report.svg";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function(){URL.revokeObjectURL(href);},1200);
+    toast("Premium SVG exported");
+  }finally{
+    button.disabled=false;
+    button.innerHTML=previous;
+  }
 });
 
 var initial=new URLSearchParams(location.search).get("u");
