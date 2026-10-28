@@ -36,7 +36,7 @@ jobs:
           sleep 2
       - name: Capture site with actual GitHub REST data
         env:
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/capture.mjs
       - name: Commit verified screenshots and data provenance
         run: |
