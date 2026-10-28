@@ -145,7 +145,37 @@ footer{border-top:1px solid #211d1a;min-height:112px;display:flex;align-items:ce
 @media(max-width:650px){
   .shell{width:min(100% - 24px,1180px)}.nav{height:68px}.nav-link{display:none}.repo-link span{display:none}.hero{padding:74px 0 58px}h1{font-size:clamp(47px,15vw,70px)}.lede{font-size:15px}.search{grid-template-columns:auto 1fr;padding-right:8px}.search .primary{grid-column:1/-1}.hero-meta{gap:9px}.report{border-radius:21px}.report-head{padding:24px 22px 0}.avatar-shell{width:60px;height:60px}.person h2{font-size:21px}.score-ring{width:78px;height:78px}.verdict{margin:27px 22px 0;padding:26px 0}.stats{margin:0 22px}.stat{padding:21px 0}.stat:not(:first-child){padding-left:15px}.stat:nth-child(3){padding-left:0}.report-actions{padding:20px 22px 24px;align-items:flex-start;flex-direction:column}.micro-note{display:none}.card{padding:22px}.health-row{grid-template-columns:92px 1fr 36px}.repo-grid{grid-template-columns:1fr}.about{padding-top:65px}footer{padding:28px 0;align-items:flex-start;flex-direction:column}
 }
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}\n</style>
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}\n
+/* Export studio — art-directed share cards */
+.studio{margin:16px 0 0;position:relative;overflow:hidden;border:1px solid #392b24;background:linear-gradient(140deg,#17120f,#0d0c0b 58%,#19100e);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.24)}
+.studio:before{content:"";width:400px;height:400px;border-radius:50%;position:absolute;right:-120px;top:-200px;background:rgba(255,91,32,.10);filter:blur(70px);pointer-events:none}
+.studio-top{display:grid;grid-template-columns:1.05fr .95fr;gap:32px;padding:30px 34px 24px;position:relative}
+.studio-label{color:#ff9f6c;font:800 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.15em;text-transform:uppercase}
+.studio h3{font-size:clamp(25px,3.6vw,37px);letter-spacing:-.052em;line-height:1.07;margin:12px 0 11px}
+.studio-copy{color:#9a8d80;font-size:12px;line-height:1.75;max-width:400px;margin:0}
+.studio-settings{justify-self:end;width:100%;max-width:410px}
+.studio-settings-heading{font-size:11px;color:#a69b8f;margin:0 0 11px}
+.theme-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.theme-option{border:1px solid #322b27;border-radius:13px;background:#14110f;min-height:72px;padding:11px;text-align:left;color:#bcb0a5;display:flex;flex-direction:column;gap:10px;transition:.2s}
+.theme-option:hover{border-color:#76604e;transform:translateY(-1px)}
+.theme-option[aria-pressed="true"]{border-color:#f29b64;background:#291b14;box-shadow:inset 0 0 0 1px rgba(255,126,62,.19)}
+.swatches{display:flex;gap:4px}.swatches i{display:inline-block;width:12px;height:12px;border-radius:50%}
+.theme-option span:last-child{font-size:11px;font-weight:700}
+.studio-preview-outer{margin:0 34px;background:radial-gradient(circle at 50% 0,rgba(255,255,255,.04),transparent 65%),#080706;border-radius:17px;border:1px solid #2d2520;padding:20px;display:grid;place-items:center;min-height:270px;position:relative}
+.studio-preview-outer img{display:block;width:100%;height:auto;max-height:520px;object-fit:contain;filter:drop-shadow(0 14px 28px rgba(0,0,0,.2));border-radius:12px}
+.studio-preview-label{position:absolute;top:14px;left:16px;padding:6px 8px;background:#171310b8;color:#95897c;border:1px solid #332b23;border-radius:7px;font-size:9px;letter-spacing:.08em;z-index:2}
+.studio-footer{padding:20px 34px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.studio-buttons{display:flex;flex-wrap:wrap;gap:10px}
+.studio-download{display:flex;align-items:center;gap:8px;justify-content:center;border:1px solid #44362c;background:#201812;color:#eec7a8;border-radius:10px;min-height:45px;padding:0 18px;font-size:12px;font-weight:770}
+.studio-download:first-child{background:linear-gradient(135deg,#ff6d30,#ffb861);color:#221008;border-color:transparent}
+.studio-download:disabled{opacity:.52;cursor:wait}
+.studio-download:hover:not(:disabled){filter:brightness(1.1)}
+.studio-footnote{max-width:280px;color:#796f65;font-size:10px;line-height:1.5;text-align:right}
+.studio-features{display:flex;gap:12px;flex-wrap:wrap;color:#7c7066;font-size:10px;padding-top:17px}.studio-features span:before{content:"✓";color:#ffad7c;margin-right:5px}
+@media(max-width:900px){.studio-top{grid-template-columns:1fr}.studio-settings{justify-self:start;max-width:none}.studio-footer{align-items:flex-start;flex-direction:column}.studio-footnote{text-align:left;max-width:none}}
+@media(max-width:650px){.studio-top{padding:25px 20px 20px;gap:24px}.studio-preview-outer{margin:0 12px;padding:10px;min-height:175px}.studio-footer{padding:18px 20px 24px}.studio-buttons{width:100%}.studio-download{flex:1;min-width:130px}.theme-option{min-height:66px}.studio-preview-label{font-size:8px;top:8px;left:8px}}
+
+</style>
 </head>
 <body>
 <div class="shell">
@@ -225,14 +255,45 @@ footer{border-top:1px solid #211d1a;min-height:112px;display:flex;align-items:ce
       </div>
     </article>
 
+
+    <section class="studio" id="studio" aria-labelledby="studioTitle">
+      <div class="studio-top">
+        <div>
+          <div class="studio-label">✦ GitRoast studio / 02</div>
+          <h3 id="studioTitle">Make your GitHub<br>look unforgettable.</h3>
+          <p class="studio-copy">Your report, reimagined as a collectible design. Pick a visual direction, preview your card, and export a sharp, editable graphic ready for social posts, presentations and portfolios.</p>
+          <div class="studio-features"><span>1600 × 900 canvas</span><span>SVG + PNG</span><span>Local rendering</span></div>
+        </div>
+        <div class="studio-settings">
+          <p class="studio-settings-heading">01 / Choose a visual direction</p>
+          <div class="theme-picker" role="group" aria-label="Card visual theme">
+            <button class="theme-option" data-theme="ember" aria-pressed="true" type="button"><span class="swatches"><i style="background:#ff6b2b"></i><i style="background:#ffc16f"></i><i style="background:#21100b"></i></span><span>Ember</span></button>
+            <button class="theme-option" data-theme="aurora" aria-pressed="false" type="button"><span class="swatches"><i style="background:#1fbbd3"></i><i style="background:#9fdbff"></i><i style="background:#0b1625"></i></span><span>Aurora</span></button>
+            <button class="theme-option" data-theme="nebula" aria-pressed="false" type="button"><span class="swatches"><i style="background:#b579ff"></i><i style="background:#ffafe5"></i><i style="background:#160e26"></i></span><span>Nebula</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="studio-preview-outer">
+        <span class="studio-preview-label">LIVE VECTOR PREVIEW · 16:9</span>
+        <img id="studioPreview" alt="Preview of your customized GitRoast share card" width="1600" height="900">
+      </div>
+      <div class="studio-footer">
+        <div class="studio-buttons">
+          <button id="studioSvg" class="studio-download" type="button">↓ Export vector SVG</button>
+          <button id="studioPng" class="studio-download" type="button">↓ Export sharp PNG</button>
+        </div>
+        <div class="studio-footnote">No watermark. No account. Your profile data never goes to a GitRoast server.</div>
+      </div>
+    </section>
+
     <div class="grid">
       <article class="card">
         <div class="card-head">
           <div><div class="card-kicker">Repository health</div><h3>Signals that matter</h3></div>
-          <div class="card-note">A compact view of maintenance, documentation and originality.</div>
+          <div class="card-note">A compact view of maintenance, repository descriptions and originality.</div>
         </div>
         <div class="health-list">
-          <div class="health-row"><label>Documentation</label><div class="track"><i id="healthDocs"></i></div><b id="healthDocsValue"></b></div>
+          <div class="health-row"><label>Descriptions</label><div class="track"><i id="healthDocs"></i></div><b id="healthDocsValue"></b></div>
           <div class="health-row"><label>Freshness</label><div class="track"><i id="healthFresh"></i></div><b id="healthFreshValue"></b></div>
           <div class="health-row"><label>Originality</label><div class="track"><i id="healthOriginal"></i></div><b id="healthOriginalValue"></b></div>
           <div class="health-row"><label>Maintenance</label><div class="track"><i id="healthMaintain"></i></div><b id="healthMaintainValue"></b></div>
@@ -278,6 +339,10 @@ footer{border-top:1px solid #211d1a;min-height:112px;display:flex;align-items:ce
 const $ = function(id){ return document.getElementById(id); };
 const API = "https://api.github.com";
 let current = null;
+let selectedTheme = "ember";
+let previewObjectUrl = null;
+let cachedAvatar = "";
+let analyzedRepoCount = 0;
 
 function clamp(n,min,max){ return Math.max(min,Math.min(max,n)); }
 function pct(n,d){ return d ? Math.round((n/d)*100) : 0; }
@@ -358,6 +423,7 @@ function renderRepo(r){
 
 function render(user,a){
   current={user:user,a:a};
+  cachedAvatar="";
   $("avatar").src=user.avatar_url;
   $("avatar").alt=(user.name||user.login)+" avatar";
   $("displayName").textContent=user.name||user.login;
@@ -389,6 +455,8 @@ function render(user,a){
 
   $("repoGrid").innerHTML=a.spotlight.length?a.spotlight.map(renderRepo).join(""):'<div class="empty">No original public repositories to spotlight yet.</div>';
   $("results").classList.remove("hidden");
+  updateStudioPreview();
+  imageDataUrl(user.avatar_url).then(function(data){if(current&&current.user.login===user.login&&data)updateStudioPreview(data);});
 
   var url=new URL(location.href);
   url.searchParams.set("u",user.login);
@@ -437,10 +505,10 @@ function svgTextLines(text,maxChars,maxLines){
 
 function buildSvg(user,a,avatarData){
   var w=1600,h=900;
-  var safeUser=escapeXml(user.login);
-  var safeName=escapeXml(user.name||user.login);
+  var safeUser=escapeXml(String(user.login).slice(0,39));
+  var safeName=escapeXml(String(user.name||user.login).slice(0,34));
   var initials=(user.name||user.login).split(/\s+/).map(function(x){return x[0];}).join("").slice(0,2).toUpperCase();
-  var quoteLines=svgTextLines(a.roast,48,3);
+  var quoteLines=svgTextLines(a.roast,44,3);
   var quoteSvg=quoteLines.map(function(line,i){return '<tspan x="112" dy="'+(i===0?0:62)+'">'+escapeXml(line)+'</tspan>';}).join("");
   var langMax=a.languages.length?a.languages[0][1]:1;
   var langSvg=a.languages.slice(0,5).map(function(item,i){
@@ -450,7 +518,7 @@ function buildSvg(user,a,avatarData){
   var scoreCirc=2*Math.PI*90;
   var dash=Math.round(scoreCirc*(a.score/100));
 
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'+
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'+
   '<defs>'+
     '<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#15100d"/><stop offset=".52" stop-color="#0b0908"/><stop offset="1" stop-color="#120c09"/></linearGradient>'+
     '<radialGradient id="glow" cx=".15" cy=".08" r=".8"><stop stop-color="#ff5a1f" stop-opacity=".22"/><stop offset="1" stop-color="#ff5a1f" stop-opacity="0"/></radialGradient>'+
@@ -481,6 +549,7 @@ function buildSvg(user,a,avatarData){
   '<text x="1075" y="624" fill="#756a61" font-size="14" letter-spacing="2" font-family="Inter,Arial,sans-serif">LANGUAGE SIGNATURE</text>'+langSvg+
   '<text x="112" y="803" fill="#625950" font-size="14" font-family="Inter,Arial,sans-serif">Public GitHub data · generated locally in your browser</text><text x="1490" y="803" fill="#7a6e64" font-size="14" text-anchor="end" font-family="ui-monospace,Menlo,monospace">GitRoast · vector export</text>'+
   '</svg>';
+  return applyTheme(svg,selectedTheme);
 }
 
 async function imageDataUrl(url){
@@ -497,6 +566,77 @@ async function imageDataUrl(url){
   }catch(e){return "";}
 }
 
+
+function applyTheme(svg,theme){
+  var palettes={
+    aurora:[
+      ["#15100d","#091726"],["#0b0908","#091018"],["#120c09","#0e1c2a"],
+      ["#ff5a1f","#29b6cf"],["#ff6b2b","#29b6cf"],["#ffc16f","#a2dcff"],
+      ["#ff8750","#53bde4"],["#ff8548","#53bde4"],["#ff8a4c","#53bde4"],
+      ["#f4eee8","#eaf6ff"],["#f5efe9","#eaf6ff"],["#ffd6b6","#c8f4ff"],
+      ["#b19682","#a4c9d9"],["#f6eee7","#f0f9ff"]
+    ],
+    nebula:[
+      ["#15100d","#170e26"],["#0b0908","#0a0b1a"],["#120c09","#1a1029"],
+      ["#ff5a1f","#a65aff"],["#ff6b2b","#a971ff"],["#ffc16f","#f2afe8"],
+      ["#ff8750","#bb7cff"],["#ff8548","#bb7cff"],["#ff8a4c","#bb7cff"],
+      ["#f4eee8","#f5efff"],["#f5efe9","#f5efff"],["#ffd6b6","#f2d6ff"],
+      ["#b19682","#d4b4e8"],["#f6eee7","#faf5ff"]
+    ]
+  };
+  var map=palettes[theme];
+  if(!map)return svg;
+  var tokens={}; map.forEach(function(p,i){tokens["__theme"+i+"__"]=p[1];svg=svg.split(p[0]).join("__theme"+i+"__");});
+  Object.keys(tokens).forEach(function(token){svg=svg.split(token).join(tokens[token]);});
+  return svg;
+}
+function updateStudioPreview(avatar){
+  if(!current)return;
+  if(avatar!==undefined)cachedAvatar=avatar;
+  if(previewObjectUrl)URL.revokeObjectURL(previewObjectUrl);
+  var svg=buildSvg(current.user,current.a,cachedAvatar);
+  previewObjectUrl=URL.createObjectURL(new Blob([svg],{type:"image/svg+xml;charset=utf-8"}));
+  $("studioPreview").src=previewObjectUrl;
+}
+function saveBlob(blob,filename){
+  var url=URL.createObjectURL(blob),link=document.createElement("a");
+  link.href=url;link.download=filename;document.body.appendChild(link);link.click();link.remove();
+  setTimeout(function(){URL.revokeObjectURL(url);},1500);
+}
+async function getAvatar(){
+  if(cachedAvatar)return cachedAvatar;
+  if(!current)return "";
+  cachedAvatar=await imageDataUrl(current.user.avatar_url);
+  return cachedAvatar;
+}
+async function exportCard(format,button){
+  if(!current)return;
+  var previous=button.innerHTML;
+  button.disabled=true;
+  button.textContent=format==="png"?"Rendering PNG…":"Building SVG…";
+  try{
+    var avatar=await getAvatar(), svg=buildSvg(current.user,current.a,avatar);
+    if(format==="svg"){
+      saveBlob(new Blob([svg],{type:"image/svg+xml;charset=utf-8"}),"gitroast-"+current.user.login+"-"+selectedTheme+".svg");
+    }else{
+      var uri=URL.createObjectURL(new Blob([svg],{type:"image/svg+xml;charset=utf-8"}));
+      try{
+        var img=new Image();
+        await new Promise(function(resolve,reject){img.onload=resolve;img.onerror=reject;img.src=uri;});
+        var canvas=document.createElement("canvas");
+        canvas.width=1600;canvas.height=900;
+        canvas.getContext("2d").drawImage(img,0,0,1600,900);
+        var png=await new Promise(function(resolve){canvas.toBlob(resolve,"image/png");});
+        if(!png)throw new Error("PNG encoding failed");
+        saveBlob(png,"gitroast-"+current.user.login+"-"+selectedTheme+".png");
+      }finally{URL.revokeObjectURL(uri);}
+    }
+    toast("Your "+format.toUpperCase()+" is ready");
+  }catch(e){
+    toast("Export failed — try SVG instead");
+  }finally{button.disabled=false;button.innerHTML=previous;}
+}
+
 $("search").addEventListener("submit",function(e){e.preventDefault();load($("username").value);});
 $("demo").addEventListener("click",function(){load("octocat");});
 
@@ -509,30 +649,17 @@ $("share").addEventListener("click",async function(){
   try{await navigator.clipboard.writeText(text+" "+url);toast("Share text copied");}catch(e){toast("Copy failed");}
 });
 
-$("download").addEventListener("click",async function(){
-  if(!current)return;
-  var button=$("download");
-  var previous=button.innerHTML;
-  button.disabled=true;
-  button.textContent="Rendering vector…";
-  try{
-    var avatarData=await imageDataUrl(current.user.avatar_url);
-    var svg=buildSvg(current.user,current.a,avatarData);
-    var blob=new Blob([svg],{type:"image/svg+xml;charset=utf-8"});
-    var href=URL.createObjectURL(blob);
-    var link=document.createElement("a");
-    link.href=href;
-    link.download="gitroast-"+current.user.login+"-signal-report.svg";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(function(){URL.revokeObjectURL(href);},1200);
-    toast("Premium SVG exported");
-  }finally{
-    button.disabled=false;
-    button.innerHTML=previous;
-  }
+$("download").addEventListener("click",function(){exportCard("svg",$("download"));});
+$("studioSvg").addEventListener("click",function(){exportCard("svg",$("studioSvg"));});
+$("studioPng").addEventListener("click",function(){exportCard("png",$("studioPng"));});
+document.querySelectorAll(".theme-option").forEach(function(button){
+  button.addEventListener("click",function(){
+    selectedTheme=button.dataset.theme;
+    document.querySelectorAll(".theme-option").forEach(function(option){option.setAttribute("aria-pressed",String(option===button));});
+    updateStudioPreview();
+  });
 });
+
 
 var initial=new URLSearchParams(location.search).get("u");
 if(initial){$("username").value=initial;load(initial);}
